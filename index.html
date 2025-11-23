@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIM Database Lookup</title>
+
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      padding: 20px; 
+      background: #f5f5f5; 
+    }
+    .box { 
+      background: #fff; 
+      padding: 20px; 
+      border-radius: 10px; 
+      max-width: 400px; 
+      margin: auto; 
+      box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+    }
+    input { 
+      width: 100%; 
+      padding: 12px; 
+      margin-top: 10px; 
+      border-radius: 6px; 
+      border: 1px solid #ccc; 
+    }
+    button { 
+      width: 100%; 
+      padding: 12px; 
+      background: #007bff; 
+      color: #fff; 
+      border: none; 
+      border-radius: 6px; 
+      margin-top: 10px; 
+      cursor: pointer;
+      font-size: 16px;
+    }
+    #result { 
+      margin-top: 20px; 
+      font-size: 16px; 
+      white-space: pre-wrap; 
+      background: #fff; 
+      padding: 15px; 
+      border-radius: 8px; 
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+    <h2>SIM Information Finder</h2>
+
+    <input id="num" placeholder="Enter Number" />
+
+    <button onclick="findSim()">Find</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function findSim() {
+
+      let number = document.getElementById('num').value;
+
+      if (!number) return alert('Please Enter Number');
+
+      document.getElementById('result').innerText = 'Loading...';
+
+      fetch('proxy.php?number=' + number)
+        .then(res => res.text())
+        .then(data => {
+
+          // Data Not Found / Paid Message
+          if (!data || data.trim() === '' || data.includes('Not Found')) {
+
+            document.getElementById('result').innerHTML = 
+              "<b>Data Not Found</b><br>" +
+              "Yeh data paid hai. Fee: <b>Rs 600</b><br><br>" +
+              "<a href='https://wa.me/923190666061' " +
+              "style='padding:12px 20px; background:#25D366; color:white; " +
+              "border-radius:6px; text-decoration:none; font-size:16px;'>📞 WhatsApp Contact</a>";
+
+          } else {
+
+            document.getElementById('result').innerText = data;
+
+          }
+        })
+        .catch(err => {
+          document.getElementById('result').innerText = 'Error fetching data';
+        });
+    }
+  </script>
+
+</body>
+</html>
