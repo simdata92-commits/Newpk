@@ -1,99 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIM Database Lookup</title>
+<meta charset="UTF-8">
+<title>Hacking Database v2.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    body { 
-      font-family: Arial, sans-serif; 
-      padding: 20px; 
-      background: #f5f5f5; 
-    }
-    .box { 
-      background: #fff; 
-      padding: 20px; 
-      border-radius: 10px; 
-      max-width: 400px; 
-      margin: auto; 
-      box-shadow: 0 0 10px rgba(0,0,0,0.1); 
-    }
-    input { 
-      width: 100%; 
-      padding: 12px; 
-      margin-top: 10px; 
-      border-radius: 6px; 
-      border: 1px solid #ccc; 
-    }
-    button { 
-      width: 100%; 
-      padding: 12px; 
-      background: #007bff; 
-      color: #fff; 
-      border: none; 
-      border-radius: 6px; 
-      margin-top: 10px; 
-      cursor: pointer;
-      font-size: 16px;
-    }
-    #result { 
-      margin-top: 20px; 
-      font-size: 16px; 
-      white-space: pre-wrap; 
-      background: #fff; 
-      padding: 15px; 
-      border-radius: 8px; 
-    }
-  </style>
+<style>
+/* GLOBAL */
+body{
+    margin:0;
+    padding:0;
+    font-family:"Courier New", monospace;
+    background:#000;
+    color:#00ff90; /* Default green text */
+    overflow-x:hidden;
+}
+
+/* MATRIX BACKGROUND */
+#matrix{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+}
+
+/* MAIN BOX */
+.box{
+    background:rgba(0,15,5,0.9);
+    border:3px solid #00ff90;
+    padding:30px;
+    max-width:620px;
+    margin:60px auto;
+    border-radius:12px;
+    box-shadow:0 0 40px #00ff90;
+    animation: borderGlow 2s infinite alternate;
+    color:#00ff90; /* Text green inside box */
+}
+
+/* Border Animation */
+@keyframes borderGlow{
+    0%{ box-shadow:0 0 20px #00ff90; }
+    100%{ box-shadow:0 0 45px #00ffaa; }
+}
+
+/* BLUE NEON TITLE */
+.title{
+    text-align:center;
+    font-size:34px;
+    margin-bottom:15px;
+    color:#00cfff; /* Blue title */
+    text-shadow:
+        0 0 15px #00cfff,
+        0 0 30px #00e5ff,
+        0 0 45px #00baff,
+        0 0 60px #0099ff;
+    animation: flicker 1.5s infinite;
+}
+
+/* Flicker like hacker screen */
+@keyframes flicker{
+    0%{opacity:1;}
+    45%{opacity:0.8;}
+    50%{opacity:1;}
+    55%{opacity:0.6;}
+    100%{opacity:1;}
+}
+
+/* INPUT */
+input{
+    width:100%;
+    padding:15px;
+    border:2px solid #00ff90;
+    background:black;
+    color:#00ff90; /* Green text */
+    font-size:20px;
+    border-radius:10px;
+    margin-top:15px;
+    outline:none;
+    box-shadow:0 0 15px #00ff90;
+}
+
+/* BUTTON */
+button{
+    width:100%;
+    padding:15px;
+    margin-top:15px;
+    font-size:20px;
+    background:#00ff90;
+    border:none;
+    color:black;
+    font-weight:bold;
+    border-radius:10px;
+    cursor:pointer;
+    box-shadow:0 0 20px #00ff90;
+    transition:0.3s;
+}
+button:hover{
+    background:#00ffaa;
+    transform:scale(1.05);
+    box-shadow:0 0 40px #00ff90;
+}
+
+/* Hacker Loading Bar */
+.loading-bar{
+    width:0%;
+    height:8px;
+    background:#00ff90;
+    margin-top:15px;
+    border-radius:5px;
+    box-shadow:0 0 10px #00ff90;
+    transition:0.5s;
+}
+
+/* OUTPUT */
+pre{
+    background:black;
+    padding:20px;
+    border-radius:12px;
+    border:2px solid #00ff90;
+    margin-top:20px;
+    min-height:120px;
+    box-shadow:0 0 20px #00ff90;
+    font-size:18px;
+    line-height:1.5;
+    white-space:pre-wrap;
+    color:#00ff90; /* Green output */
+}
+
+/* Blinking Cursor */
+#output:after{
+    content:"█";
+    animation: cursorBlink 0.7s infinite;
+}
+@keyframes cursorBlink{
+    0%,50%{opacity:1;}
+    51%,100%{opacity:0;}
+}
+
+/* WHATSAPP BOX */
+.whatsapp-box{
+    background:rgba(0,15,5,0.9);
+    border:3px solid #00ff90;
+    padding:25px;
+    border-radius:12px;
+    margin:40px auto;
+    max-width:620px;
+    text-align:center;
+    box-shadow:0 0 35px #00ff90;
+    animation: borderGlow 2s infinite alternate;
+    color:#00ff90; /* Green text */
+}
+
+/* WhatsApp Button */
+.whatsapp-box a{
+    display:inline-block;
+    background:#25D366;
+    color:black;
+    padding:15px 25px;
+    border-radius:12px;
+    text-decoration:none;
+    font-size:24px;
+    font-weight:bold;
+    margin-top:15px;
+    box-shadow:0 0 25px #25D366;
+    transition:0.3s;
+}
+.whatsapp-box a:hover{
+    transform:scale(1.07);
+    box-shadow:0 0 40px #25D366;
+}
+
+.whatsapp-box span{
+    color:#ff2b2b;
+    font-size:28px;
+    font-weight:bold;
+}
+</style>
 </head>
-
 <body>
 
-  <div class="box">
-    <h2>SIM Information Finder</h2>
+<!-- MATRIX CANVAS -->
+<canvas id="matrix"></canvas>
 
-    <input id="num" placeholder="Enter Number" />
+<div class="box">
+    <div class="title">⚡ Raza Tracker 03190666061</div>
 
-    <button onclick="findSim()">Find</button>
+    <input id="number" placeholder="Enter Number or CNIC">
 
-    <div id="result"></div>
-  </div>
+    <button onclick="lookup()">Search SCANNING</button>
 
-  <script>
-    function findSim() {
+    <div class="loading-bar" id="loadingBar"></div>
 
-      let number = document.getElementById('num').value;
+    <pre id="output">Awaiting Input...</pre>
+</div>
 
-      if (!number) return alert('Please Enter Number');
+<div class="whatsapp-box">
+    ⚠️ Data Na Anay Ki Soorat Mein  
+    <br><br>
+    WhatsApp Par Rabta Karein:
+    <br><br>
+    <a href="https://wa.me/923190666066" target="_blank">
+        WhatsApp: 03190666066
+    </a>
+    <br><br>
+    Paid Full Data Available  
+    <span>Rs. 600</span>
+</div>
 
-      document.getElementById('result').innerText = 'Loading...';
+<script>
+/* API SCAN FUNCTION */
+function lookup(){
+    let num = document.getElementById("number").value;
+    let loadingBar = document.getElementById("loadingBar");
+    let output = document.getElementById("output");
 
-      fetch('proxy.php?number=' + number)
-        .then(res => res.text())
-        .then(data => {
+    output.innerText = "Initializing Scan...\nConnecting to secure server...\n";
+    loadingBar.style.width = "10%";
 
-          // Data Not Found / Paid Message
-          if (!data || data.trim() === '' || data.includes('Not Found')) {
+    setTimeout(()=>{ loadingBar.style.width="40%"; output.innerText += "Fetching API...\n"; },500);
+    setTimeout(()=>{ loadingBar.style.width="70%"; output.innerText += "Decrypting Data...\n"; },1200);
 
-            document.getElementById('result').innerHTML = 
-              "<b>Data Not Found</b><br>" +
-              "Yeh data paid hai. Fee: <b>Rs 600</b><br><br>" +
-              "<a href='https://wa.me/923190666061' " +
-              "style='padding:12px 20px; background:#25D366; color:white; " +
-              "border-radius:6px; text-decoration:none; font-size:16px;'>📞 WhatsApp Contact</a>";
+    let apiSIM = "https://corsproxy.io/?https://shadowscriptz.xyz/public_apis/simdetailsapi.php?number=" + num;
+    let apiCNIC = "https://corsproxy.io/?https://shadowscriptz.xyz/public_apis/cnicdetailsapi.php?cnic=" + num;
 
-          } else {
+    let url = (num.length === 13) ? apiCNIC : apiSIM;
 
-            document.getElementById('result').innerText = data;
+    fetch(url)
+    .then(r => r.text())
+    .then(data => {
+        setTimeout(()=>{
+            loadingBar.style.width="100%";
+            output.innerText = data;
+        },2000);
+    })
+    .catch(err => {
+        loadingBar.style.width="100%";
+        output.innerText = "❌ ERROR: API Blocked or No Response\nTry Again.";
+    });
+}
 
-          }
-        })
-        .catch(err => {
-          document.getElementById('result').innerText = 'Error fetching data';
-        });
+/* MATRIX BACKGROUND ANIMATION */
+var c = document.getElementById("matrix");
+var ctx = c.getContext("2d");
+c.height = window.innerHeight;
+c.width = window.innerWidth;
+var matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()".split("");
+var font = 16;
+var columns = c.width/font;
+var drops = [];
+for(var x=0;x<columns;x++) drops[x]=1;
+
+function draw(){
+    ctx.fillStyle="rgba(0,0,0,0.05)";
+    ctx.fillRect(0,0,c.width,c.height);
+
+    ctx.fillStyle="#00ff90";
+    ctx.font=font+"px Courier";
+
+    for(var i=0;i<drops.length;i++){
+        var text = matrix[Math.floor(Math.random()*matrix.length)];
+        ctx.fillText(text,i*font,drops[i]*font);
+
+        if(drops[i]*font > c.height && Math.random()>0.975) drops[i]=0;
+        drops[i]++;
     }
-  </script>
+}
+setInterval(draw,33);
+</script>
+
+<script>
+// ====== ANTI-COPY + BLOCK DEVTOOLS ======
+(function(){
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('selectstart', e => e.preventDefault());
+    document.addEventListener('copy', e => e.preventDefault());
+    document.addEventListener('cut', e => e.preventDefault());
+
+    document.onkeydown = function(e){
+        if(e.keyCode===123 ||
+           (e.ctrlKey && e.shiftKey && (e.keyCode===73||e.keyCode===74)) ||
+           (e.ctrlKey && e.keyCode===85) ||
+           (e.ctrlKey && e.keyCode===67) ||
+           (e.ctrlKey && e.keyCode===83) ||
+           (e.ctrlKey && e.keyCode===80) ||
+           (e.ctrlKey && e.keyCode===86)
+        ){ 
+            alert("⚠️ Action Blocked: Security Enabled!"); 
+            return false;
+        }
+    };
+
+    document.addEventListener('keydown', function(e){
+        if(e.key === 'PrintScreen'){
+            alert("⚠️ Screenshot Blocked by Security System!");
+            navigator.clipboard.writeText("");
+        }
+    });
+
+    setInterval(function(){
+        if(window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160){
+            document.body.innerHTML = "<div style='color:#ff0000;font-size:30px;text-align:center;margin-top:200px;'>⚠️ Security Alert! Attempt Detected!</div>";
+            document.body.style.background = "#000";
+        }
+    },1000);
+})();
+</script>
+
+<!-- ===== Auto WhatsApp Channel Popup ===== -->
+<script>
+window.onload = function() {
+    window.open(
+        'https://whatsapp.com/channel/0029VasFUKcEFeXi3v276O2I',
+        'whatsappChannel',
+        'width=600,height=700,top=100,left=200,scrollbars=yes,resizable=yes'
+    );
+};
+</script>
 
 </body>
 </html>
