@@ -36,7 +36,7 @@ body{
     border-radius:12px;
     box-shadow:0 0 40px #00ff90;
     animation: borderGlow 2s infinite alternate;
-    color:#00ff90; /* Text green inside box */
+    color:#00ff90;
 }
 
 /* Border Animation */
@@ -150,7 +150,7 @@ pre{
     text-align:center;
     box-shadow:0 0 35px #00ff90;
     animation: borderGlow 2s infinite alternate;
-    color:#00ff90; /* Green text */
+    color:#00ff90;
 }
 
 /* WhatsApp Button */
@@ -273,51 +273,4 @@ setInterval(draw,33);
 <script>
 // ====== ANTI-COPY + BLOCK DEVTOOLS ======
 (function(){
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('selectstart', e => e.preventDefault());
-    document.addEventListener('copy', e => e.preventDefault());
-    document.addEventListener('cut', e => e.preventDefault());
-
-    document.onkeydown = function(e){
-        if(e.keyCode===123 ||
-           (e.ctrlKey && e.shiftKey && (e.keyCode===73||e.keyCode===74)) ||
-           (e.ctrlKey && e.keyCode===85) ||
-           (e.ctrlKey && e.keyCode===67) ||
-           (e.ctrlKey && e.keyCode===83) ||
-           (e.ctrlKey && e.keyCode===80) ||
-           (e.ctrlKey && e.keyCode===86)
-        ){ 
-            alert("⚠️ Action Blocked: Security Enabled!"); 
-            return false;
-        }
-    };
-
-    document.addEventListener('keydown', function(e){
-        if(e.key === 'PrintScreen'){
-            alert("⚠️ Screenshot Blocked by Security System!");
-            navigator.clipboard.writeText("");
-        }
-    });
-
-    setInterval(function(){
-        if(window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160){
-            document.body.innerHTML = "<div style='color:#ff0000;font-size:30px;text-align:center;margin-top:200px;'>⚠️ Security Alert! Attempt Detected!</div>";
-            document.body.style.background = "#000";
-        }
-    },1000);
-})();
-</script>
-
-<!-- ===== Auto WhatsApp Channel Popup ===== -->
-<script>
-window.onload = function() {
-    window.open(
-        'https://whatsapp.com/channel/0029VasFUKcEFeXi3v276O2I',
-        'whatsappChannel',
-        'width=600,height=700,top=100,left=200,scrollbars=yes,resizable=yes'
-    );
-};
-</script>
-
-</body>
-</html>
+    document.addEventListener('contextmenu', e => e.preventDefault
